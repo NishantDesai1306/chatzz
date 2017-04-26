@@ -20,12 +20,12 @@ var init = function(httpServer, config) {
         return console.log('valid mongoose instance is required by chatzz');
     }
 
-    chatzConfig = config || {};
+    chatzzConfig = config || {};
 
     ChatzzMethods.initChatzz(httpServer);
-    ChatUserMethods.initModel(config.chatUserModelName, config.userModelName);
+    ChatUserMethods.initModel(chatzzConfig.chatUserModelName, chatzzConfig.userModelName);
     ChatRoomMethods.initModel();
-    ChatMessageMethods.initModel(config.chatUserModelName);
+    ChatMessageMethods.initModel(chatzzConfig.chatUserModelName);
 
     isInitialized = true;
 };
