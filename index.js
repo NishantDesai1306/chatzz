@@ -8,8 +8,9 @@ var ChatRoomMethods = require('./lib/methods/ChatRoom');
 var ChatzzMethods = require('./lib/methods/Chatzz');
 
 var isInitialized = false;
+var chatzzConfig = null;
 
-var init = function(httpServer, chatUserModelName, userModelName, chatMessageModelName) {
+var init = function(httpServer, config) {
 
     if (isInitialized) {
         return;
@@ -19,17 +20,24 @@ var init = function(httpServer, chatUserModelName, userModelName, chatMessageMod
         return console.log('valid mongoose instance is required by chatzz');
     }
 
+    chatzConfig = config || {};
+
     ChatzzMethods.initChatzz(httpServer);
-    ChatUserMethods.initModel(chatUserModelName, userModelName);
+    ChatUserMethods.initModel(config.chatUserModelName, config.userModelName);
     ChatRoomMethods.initModel();
-    ChatMessageMethods.initModel(chatUserModelName);
+    ChatMessageMethods.initModel(config.chatUserModelName);
 
     isInitialized = true;
 };
 
+var getChatzzConfig = function() {
+    return chatzzConfig;
+};
+
 var getMethodsToExport = function() {
     var methodsToExport = {
-        init: init
+        init: init,
+        getChatzzConfig: getChatzzConfig
     };
     var ignoreExports = ['initChatzz'];
 
