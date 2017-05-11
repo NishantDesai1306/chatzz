@@ -54,7 +54,7 @@ server.listen(port, function() {
       status: 'online' or 'offline',
       lastOnline: 'date-time string',
       connectedUsers: [
-        // array of users object connected to the requesting user
+        // array of users object connected to the requesting user + chatRoomId
       ],
       missedMessages: {
         'userId1': [
@@ -82,10 +82,19 @@ server.listen(port, function() {
   }
   ```
   
-	**2**. `add-chat-user`: Client should emit this event when the corresponding user wants to add another user as its `connectedUser` (see connectedUser field in object returned from server on emitting `user-details` event) to from client side to register the user in the chat system with this data `{ userToAdd: <user id of another user> }`
+	**2**. `add-chat-user`: Client should emit this event when the corresponding user wants to add another user as its `connectedUser` (see connectedUser field in object returned from server on emitting `user-details` event) to from client side to register the user in the chat system with this data `{ userToAdd: <user id of another user> }` and an error first callback
     
-  `Server will not emit any event as part of this function.`
-  
+  Server will emit a `chat-user-added` event destined `userToAdd` user as follows.
+  ```
+  {
+    type: 'chat-user-added`,
+    data: {
+      // details of user requested to **userToAdd** user
+      lastOnline: // date-time string
+      status: 'online'
+    } 
+  }
+  ```
 
 	**3**. `get-old-messages`: Client should emit this event when it wants to fetch old messages from chat with another user with following data.
   ```
@@ -115,7 +124,7 @@ server.listen(port, function() {
 	**4**. `send-message`: Client should emit this event with following data when it wants to send a message to another user.
   ```
   { 
-    toUser: //user id of another user
+    userId: //user id of another user
     message: //message string which Client wants to send
   } 
   ```
